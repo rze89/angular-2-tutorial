@@ -10,11 +10,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var hero_detail_component_1 = require('./hero-detail.component');
+var hero_service_1 = require("./hero.service");
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(heroService) {
+        this.heroService = heroService;
         this.title = "Tour of Heroes";
-        this.heroes = HEROES;
     }
+    AppComponent.prototype.ngOnInit = function () {
+        this.getHeroes();
+    };
+    AppComponent.prototype.getHeroes = function () {
+        var _this = this;
+        this.heroService.getHeroes()
+            .then(function (data) { return _this.heroes = data; });
+    };
     AppComponent.prototype.onSelect = function (hero) {
         return this.selectedHero = hero;
     };
@@ -23,23 +32,12 @@ var AppComponent = (function () {
             selector: 'my-app',
             template: "\n          <h1>{{title}}</h1>\n          <div>\n            <h2>My Heroes</h2>\n            <ul class=\"heroes\">\n              <li *ngFor=\"let hero of heroes\" (click)=\"onSelect(hero)\" [class.selected]=\"hero === selectedHero\">\n                <span class=\"badge\">{{hero.id}}</span> {{hero.name}}\n              </li>\n            </ul>\n          </div>\n          <my-hero-detail [hero]=\"selectedHero\"></my-hero-detail>\n          ",
             styleUrls: ['./styles.css'],
-            directives: [hero_detail_component_1.HeroDetailComponent]
+            directives: [hero_detail_component_1.HeroDetailComponent],
+            providers: [hero_service_1.HeroService]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [hero_service_1.HeroService])
     ], AppComponent);
     return AppComponent;
 }());
 exports.AppComponent = AppComponent;
-var HEROES = [
-    { "id": 11, "name": "Mr. Nice" },
-    { "id": 12, "name": "Narco" },
-    { "id": 13, "name": "Bombasto" },
-    { "id": 14, "name": "Celeritas" },
-    { "id": 15, "name": "Magneta" },
-    { "id": 16, "name": "RubberMan" },
-    { "id": 17, "name": "Dynama" },
-    { "id": 18, "name": "Dr IQ" },
-    { "id": 19, "name": "Magma" },
-    { "id": 20, "name": "Tornado" }
-];
 //# sourceMappingURL=app.component.js.map
