@@ -11,30 +11,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var hero_detail_component_1 = require('./hero-detail.component');
 var hero_service_1 = require("./hero.service");
+var router_deprecated_1 = require('@angular/router-deprecated');
 var HeroesComponent = (function () {
-    function HeroesComponent(heroService) {
+    function HeroesComponent(router, heroService) {
+        this.router = router;
         this.heroService = heroService;
-        this.title = "Tour of Heroes";
     }
+    HeroesComponent.prototype.getHeroes = function () {
+        var _this = this;
+        this.heroService.getHeroes().then(function (heroes) { return _this.heroes = heroes; });
+    };
     HeroesComponent.prototype.ngOnInit = function () {
         this.getHeroes();
     };
-    HeroesComponent.prototype.getHeroes = function () {
-        var _this = this;
-        this.heroService.getHeroes()
-            .then(function (data) { return _this.heroes = data; });
-    };
-    HeroesComponent.prototype.onSelect = function (hero) {
-        return this.selectedHero = hero;
+    HeroesComponent.prototype.onSelect = function (hero) { this.selectedHero = hero; };
+    HeroesComponent.prototype.gotoDetail = function () {
+        this.router.navigate(['HeroDetail', { id: this.selectedHero.id }]);
     };
     HeroesComponent = __decorate([
         core_1.Component({
             selector: 'my-heroes',
-            template: "\n          <h1>{{title}}</h1>\n          <div>\n            <h2>My Heroes</h2>\n            <ul class=\"heroes\">\n              <li *ngFor=\"let hero of heroes\" (click)=\"onSelect(hero)\" [class.selected]=\"hero === selectedHero\">\n                <span class=\"badge\">{{hero.id}}</span> {{hero.name}}\n              </li>\n            </ul>\n          </div>\n          <my-hero-detail [hero]=\"selectedHero\"></my-hero-detail>\n          ",
+            templateUrl: 'app/heroes.component.html',
             styleUrls: ['./styles.css'],
             directives: [hero_detail_component_1.HeroDetailComponent]
         }), 
-        __metadata('design:paramtypes', [hero_service_1.HeroService])
+        __metadata('design:paramtypes', [router_deprecated_1.Router, hero_service_1.HeroService])
     ], HeroesComponent);
     return HeroesComponent;
 }());
